@@ -2,6 +2,7 @@
 # Date Created: 19/08/2023
 # Version: 1.0.0
 import os
+import time
 
 import img2pdf
 from PIL import Image
@@ -27,17 +28,23 @@ def e_sign():
 
 
 def post_processing():
-    for dirname in os.listdir('PDF_Signed'):
-        # Check if the directory name ends with '_dir'
-        if dirname.endswith('_dir'):
-            # Construct the full path of the directory
-            dir_path = os.path.join('PDF_Signed', dirname)
-            print(f'Processing {dir_path}...')
-            # Loop through all files in the directory
-            for filename in os.listdir(dir_path):
-                print(f'Processing {filename}...')
-                post_processing2(filename, dir_path)
-
+    try:
+        for dirname in os.listdir('PDF_Signed'):
+            # Check if the directory name ends with '_dir'
+            if dirname.endswith('_dir'):
+                # Construct the full path of the directory
+                dir_path = os.path.join('PDF_Signed', dirname)
+                print(f'Processing {dir_path}...')
+                # Loop through all files in the directory
+                for filename in os.listdir(dir_path):
+                    print(f'Processing {filename}...')
+                    post_processing2(filename, dir_path)
+    except FileNotFoundError:
+        print("Error: No PDF files found."
+              "Please place the PDF files in the same directory as this exe.\n"
+              "Exiting the program. Please wait...")
+        time.sleep(5)
+        exit(0)
 
 def post_processing2(filename, dir_path):
     if '.pdf.jpg' in filename:
