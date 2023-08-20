@@ -65,7 +65,7 @@ def post_processing3(dir_path):
 
 def user_input_process():
     while True:
-        user_input = input("Program completed. Do you want to exit? (y/n): ").lower()
+        user_input = input("Program completed. Do you want to exit? (y/n):").lower()
         if user_input == 'y':
             exit()
         elif user_input == 'n':

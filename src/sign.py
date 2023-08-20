@@ -14,7 +14,7 @@ print(
         "Note: Signature should be in png format with transparent background "
         "and should be named as signature.png\n"
     )
-user_input = input("Press enter to continue.")
+user_input = input("Press enter to continue...")
 
 if user_input == '':
     print("Signing PDF files.\n")
