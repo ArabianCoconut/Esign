@@ -28,3 +28,7 @@ This is a simple e-signing application that allows users to sign documents offli
 
 ## Buy me a Coffee :coffee:
 <a href="https://www.buymeacoffee.com/arabiancoconut" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
+
+Thank you for supporting.
+
+---
