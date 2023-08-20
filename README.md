@@ -15,7 +15,7 @@ This is a simple e-signing application that allows users to sign documents offli
 2. ```pip install -r requirements.txt``` to install dependencies
 3. ```python sign.py``` to run the application
 
-**Note**: you may use the sign.exe file to run the application without installing python.
+**Note**: you may use the sign.exe bin file from release to run the application without installing python.
 
 ---
 
@@ -23,3 +23,8 @@ This is a simple e-signing application that allows users to sign documents offli
 1. ```pip install pyinstaller```
 2. ```python pyinstaller --onefile  --add-binary  "D:/Programming/Playground/Python/.venv/Lib/site-packages/pdf2jpg/pdf2jpg.jar;./pdf2jpg/" sign.py```
 3. ```commandline start dist/sign.exe```
+
+---
+
+## Buy me a Coffee :coffee:
+<a href="https://www.buymeacoffee.com/arabiancoconut" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
