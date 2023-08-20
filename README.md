@@ -21,7 +21,7 @@ This is a simple e-signing application that allows users to sign documents offli
 
 ## Build using pyinstaller
 1. ```pip install pyinstaller```
-2. ```python pyinstaller --onefile  --add-binary  "D:/Programming/Playground/Python/.venv/Lib/site-packages/pdf2jpg/pdf2jpg.jar;./pdf2jpg/" sign.py```
+2. ```python pyinstaller --onefile  --add-binary  "<Python PATH> /Lib/site-packages/pdf2jpg/pdf2jpg.jar;./pdf2jpg/" sign.py```
 3. ```commandline start dist/sign.exe```
 
 ---
