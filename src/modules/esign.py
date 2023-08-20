@@ -1,6 +1,6 @@
 # Author: Arabian Coconut
 # Date Created: 19/08/2023
-# Version: 1.0
+# Version: 1.0.0
 import os
 
 import img2pdf
