@@ -22,8 +22,7 @@ def e_sign():
             background.paste(layer, (x, y), layer)
             background.save(output[0]['output_jpgfiles'][0])
         else:
-            print("Error:No PDF files found."
-                "Please place the PDF files in the same directory as this exe.\n")
+            print("Error:No PDF files found. Please place the PDF files in the same directory as this exe.\n")
             exit()
 
 
