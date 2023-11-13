@@ -8,7 +8,7 @@ import img2pdf
 from PIL import Image
 from pdf2jpg import pdf2jpg
 
-
+#! Rewrite code for better readability
 def e_sign():
     for filename in os.listdir('PDF_Here'):
         if filename.endswith('.pdf'):
@@ -23,7 +23,7 @@ def e_sign():
             background.save(output[0]['output_jpgfiles'][0])
         else:
             print("Error:No PDF files found."
-                  "Please place the PDF files in the same directory as this exe.\n")
+                "Please place the PDF files in the same directory as this exe.\n")
             exit()
 
 
@@ -41,8 +41,8 @@ def post_processing():
                     post_processing2(filename, dir_path)
     except FileNotFoundError:
         print("Error: No PDF files found."
-              "Please place the PDF files in the same directory as this exe.\n"
-              "Exiting the program. Please wait...")
+            "Please place the PDF files in the same directory as this exe.\n"
+            "Exiting the program. Please wait...")
         time.sleep(5)
         exit(0)
 
