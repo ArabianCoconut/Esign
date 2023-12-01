@@ -20,7 +20,7 @@ if user_input == '':
     print("Signing PDF files.\n")
     e_sign()
     print("Signing completed.\n"
-          "Please wait while the program processes the files.\n")
+        "Please wait while the program processes the files.\n")
     time.sleep(2)
     post_processing()
     print("\nProcessing completed.\n")
