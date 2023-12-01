@@ -1,81 +1,120 @@
-# Author: Arabian Coconut
-# Date Created: 19/08/2023
-# Version: 1.0.0
+import glob
 import os
 import time
-
 import img2pdf
 from PIL import Image
 from pdf2jpg import pdf2jpg
 
-#! Rewrite code for better readability
-def e_sign():
-    for filename in os.listdir('PDF_Here'):
-        if filename.endswith('.pdf'):
-            dir_path = os.path.join('PDF_Here', filename)
-            output = pdf2jpg.convert_pdf2jpg(dir_path, outputpath='PDF_Signed', pages='ALL')
-            print(f'output: {output}')
-            background = Image.open(output[0]['output_jpgfiles'][0])
-            layer = Image.open('./signature.png').convert('RGBA')
-            layer = layer.resize((800, 800))
-            x, y = 450, 2100
-            background.paste(layer, (x, y), layer)
-            background.save(output[0]['output_jpgfiles'][0])
-        else:
-            print("Error:No PDF files found. Please place the PDF files in the same directory as this exe.\n")
-            exit()
+PDF_HERE_DIR = 'src/PDF_Here'
+PDF_SIGNED_DIR = 'src/PDF_Signed'
+SIGNATURE_DIR = 'src/Signature_Sample'
+
+SIGNATURE_SIZE = (800, 800)
+SIGNATURE_POSITION = (450, 2100)
 
 
-def post_processing():
+def log():
+    '''
+    Create a log file if there is no PDF files found.
+    '''
+    with open('log.txt', 'w', encoding='utf-8') as f:
+        f.write(
+            "Error: No PDF files found.\n"
+            "Please place the PDF files in the 'PDF_Here' directory.\n"
+            "Also, make sure the signature image is in the 'Signature_Sample' as this exe and with transparent background and in png format.\n"
+        )
+    time.sleep(5)
+    exit(0)
+
+
+def create_folders():
+    """
+    This function creates the 'PDF_Here', 'PDF_Signed', and 'Signature_Sample' directories if they don't exist.
+    """
     try:
-        for dirname in os.listdir('PDF_Signed'):
-            # Check if the directory name ends with '_dir'
-            if dirname.endswith('_dir'):
-                # Construct the full path of the directory
-                dir_path = os.path.join('PDF_Signed', dirname)
-                print(f'Processing {dir_path}...')
-                # Loop through all files in the directory
-                for filename in os.listdir(dir_path):
-                    print(f'Processing {filename}...')
-                    post_processing2(filename, dir_path)
+        os.mkdir(PDF_HERE_DIR)
+        os.mkdir(PDF_SIGNED_DIR)
+        os.mkdir(SIGNATURE_DIR)
+    except FileExistsError:
+        with open('log_warning.txt', 'w', encoding='utf-8') as f:
+            f.write(
+                "Warning: The 'PDF_Here', 'PDF_Signed',and 'Signature_Sample' directories already exist.\n"
+                "Please delete them and run the program again. If the program do not work correctly.\n"
+            )
     except FileNotFoundError:
-        print("Error: No PDF files found."
-            "Please place the PDF files in the same directory as this exe.\n"
-            "Exiting the program. Please wait...")
-        time.sleep(5)
-        exit(0)
-
-def post_processing2(filename, dir_path):
-    if '.pdf.jpg' in filename:
-        # Generate a new file name by replacing '.pdf.jpg' with '.jpg'
-        new_filename = filename.replace('.pdf.jpg', '.jpg')
-        # Rename the file
-        os.rename(os.path.join(dir_path, filename), os.path.join(dir_path, new_filename))
-        # Convert the image to PDF
-        with open(os.path.join(dir_path, new_filename.replace('.jpg', '.pdf')), 'wb') as f:
-            f.write(img2pdf.convert(os.path.join(dir_path, new_filename)))
-        # Delete the image file
-        os.remove(os.path.join(dir_path, new_filename))
-        post_processing3(dir_path)  # continue to post_processing2
+        with open('Log_Error.txt', 'w', encoding='utf-8') as f:
+            f.write(
+                "Place .pdf files in the 'PDF_Here' directory.\n"
+                "Place the signature image in the 'Signature_Sample' directory.\n"
+            )
 
 
-def post_processing3(dir_path):
-    for filename in os.listdir(dir_path):
-        if "0_" in filename:
-            print("found.. Removing 0_")
-            new_filename = filename.replace('0_', '')
-            os.rename(os.path.join(dir_path, filename), os.path.join(dir_path, new_filename))
-        else:
-            print("No 0_ containing file found.")
+def esign():
+    """
+    * This function signs all PDF files in the 'PDF_Here' directory using a signature image. 
+    * Saves the signed PDFs in the 'PDF_Signed' directory.
+    """
+    try:
+        create_folders()
+        # Get the paths of all PDF files in the 'PDF_Here' directory
+        pdf_paths = glob.glob(f'{PDF_HERE_DIR}/*.pdf')
+        signature_paths = glob.glob(f'{SIGNATURE_DIR}/*.png')[0]
+        print(signature_paths)  # * Debug
+        for pdf_path in pdf_paths:
+            # Convert the PDF to JPG
+            jpg_path = pdf2jpg.convert_pdf2jpg(pdf_path, outputpath=PDF_SIGNED_DIR)[
+                0]['output_jpgfiles'][0]
+
+            # Open the JPG as a PIL Image
+            background = Image.open(jpg_path)
+
+            # Open the signature image and resize it
+            signature = Image.open(signature_paths).convert('RGBA')
+            signature_resized = signature.resize(SIGNATURE_SIZE)
+
+            # Paste the signature onto the background
+            background.paste(signature_resized,SIGNATURE_POSITION, signature_resized)
+
+            # Save the signed PDF
+            background.save(jpg_path, format='png', quality=100)
+
+    except FileNotFoundError:
+        log()
+    except AttributeError:
+        create_folders()
+
+    convert_jpg_to_pdf()
 
 
-def user_input_process():
-    while True:
-        user_input = input("Program completed. Do you want to exit? (y/n):").lower()
-        if user_input == 'y':
-            exit()
-        elif user_input == 'n':
-            print("Restarting the program. please wait")
-            os.system('start sign.exe')
+def convert_jpg_to_pdf():
+    """
+    * This function converts all JPG files in the 'PDF_Signed' directory to PDF files. 
+    * Saves them in the same directory.
+    """
+    # Get all directories ending with '.pdf_dir'
+    directories = glob.glob(f'{PDF_SIGNED_DIR}/*.pdf_dir')
 
+    for directory in directories:
+        # Get all '.pdf.jpg' files in the current directory
+        jpg_files = glob.glob(f'{directory}/*.pdf.jpg')
 
+        for jpg_file in jpg_files:
+            # Convert '.pdf.jpg' to '.png'
+            png_file = jpg_file.replace('.pdf.jpg', '.png')
+            Image.open(jpg_file).save(png_file)
+
+            # Convert '.png' to '.pdf'
+            pdf_file = png_file.replace('.png', '.pdf')
+            with open(png_file, 'rb') as img_file, open(pdf_file, 'wb') as pdf_file:
+                pdf_bytes = img2pdf.convert(img_file.read())
+                pdf_file.write(pdf_bytes)
+
+            # Remove the '.png' and '.jpg' files
+            os.remove(png_file)
+            os.remove(jpg_file)
+
+        # Rename files starting with '0_'
+        for filename in glob.glob(f'{directory}/*.pdf'):
+            if os.path.basename(filename).startswith('0_'):
+                new_name = filename.replace('0_', '', 1)
+                os.rename(filename, new_name)
