@@ -4,7 +4,7 @@
 import os
 import time
 
-from modules.esign import e_sign, post_processing, user_input_process
+from modules.esign import esign
 
 os.makedirs("PDF_Here", exist_ok=True)
 
@@ -18,12 +18,10 @@ user_input = input("Press enter to continue...")
 
 if user_input == '':
     print("Signing PDF files.\n")
-    e_sign()
+    esign()
     print("Signing completed.\n"
         "Please wait while the program processes the files.\n")
     time.sleep(2)
-    post_processing()
     print("\nProcessing completed.\n")
-    user_input_process()
 else:
     print("Error: Something went wrong.\n")
