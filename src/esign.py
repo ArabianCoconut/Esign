@@ -12,18 +12,20 @@ SIGNATURE_DIR = 'src/Signature_Sample'
 SIGNATURE_SIZE = (800, 800)
 SIGNATURE_POSITION = (450, 2100)
 
+
 def log():
     '''
     Create a log file if there is no PDF files found.
     '''
     with open('log.txt', 'w', encoding='utf-8') as f:
-            f.write(
-                "Error: No PDF files found.\n"
-                "Please place the PDF files in the 'PDF_Here' directory.\n"
-                "Also, make sure the signature image is in the 'Signature_Sample' as this exe and with transparent background and in png format.\n"
-            )
+        f.write(
+            "Error: No PDF files found.\n"
+            "Please place the PDF files in the 'PDF_Here' directory.\n"
+            "Also, make sure the signature image is in the 'Signature_Sample' as this exe and with transparent background and in png format.\n"
+        )
     time.sleep(5)
     exit(0)
+
 
 def create_folders():
     """
@@ -46,19 +48,22 @@ def create_folders():
                 "Place the signature image in the 'Signature_Sample' directory.\n"
             )
 
+
 def esign():
     """
-    This function signs all PDF files in the 'PDF_Here' directory using a signature image and saves the signed PDFs in the 'PDF_Signed' directory.
+    * This function signs all PDF files in the 'PDF_Here' directory using a signature image. 
+    * Saves the signed PDFs in the 'PDF_Signed' directory.
     """
     try:
         create_folders()
         # Get the paths of all PDF files in the 'PDF_Here' directory
         pdf_paths = glob.glob(f'{PDF_HERE_DIR}/*.pdf')
         signature_paths = glob.glob(f'{SIGNATURE_DIR}/*.png')[0]
-        print(signature_paths)#* Debug
+        print(signature_paths)  # * Debug
         for pdf_path in pdf_paths:
             # Convert the PDF to JPG
-            jpg_path = pdf2jpg.convert_pdf2jpg(pdf_path, outputpath=PDF_SIGNED_DIR)[0]['output_jpgfiles'][0]
+            jpg_path = pdf2jpg.convert_pdf2jpg(pdf_path, outputpath=PDF_SIGNED_DIR)[
+                0]['output_jpgfiles'][0]
 
             # Open the JPG as a PIL Image
             background = Image.open(jpg_path)
@@ -68,7 +73,7 @@ def esign():
             signature_resized = signature.resize(SIGNATURE_SIZE)
 
             # Paste the signature onto the background
-            background.paste(signature_resized, SIGNATURE_POSITION, signature_resized)
+            background.paste(signature_resized,SIGNATURE_POSITION, signature_resized)
 
             # Save the signed PDF
             background.save(jpg_path, format='png', quality=100)
@@ -77,10 +82,14 @@ def esign():
         log()
     except AttributeError:
         create_folders()
-        
+
+    convert_jpg_to_pdf()
+
+
 def convert_jpg_to_pdf():
     """
-    This function converts all JPG files in the 'PDF_Signed' directory to PDF files and saves them in the same directory.
+    * This function converts all JPG files in the 'PDF_Signed' directory to PDF files. 
+    * Saves them in the same directory.
     """
     # Get all directories ending with '.pdf_dir'
     directories = glob.glob(f'{PDF_SIGNED_DIR}/*.pdf_dir')
