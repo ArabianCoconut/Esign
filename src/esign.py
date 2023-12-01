@@ -1,6 +1,5 @@
 import glob
 import os
-from re import A
 import time
 import img2pdf
 from PIL import Image
@@ -14,6 +13,9 @@ SIGNATURE_SIZE = (800, 800)
 SIGNATURE_POSITION = (450, 2100)
 
 def log():
+    '''
+    Create a log file if there is no PDF files found.
+    '''
     with open('log.txt', 'w', encoding='utf-8') as f:
             f.write(
                 "Error: No PDF files found.\n"
@@ -25,7 +27,7 @@ def log():
 
 def create_folders():
     """
-    This function creates the 'PDF_Here' and 'PDF_Signed' directories if they don't exist.
+    This function creates the 'PDF_Here', 'PDF_Signed', and 'Signature_Sample' directories if they don't exist.
     """
     try:
         os.mkdir(PDF_HERE_DIR)
@@ -75,7 +77,6 @@ def esign():
         log()
     except AttributeError:
         create_folders()
-        log()
         
 def convert_jpg_to_pdf():
     """
@@ -108,5 +109,3 @@ def convert_jpg_to_pdf():
             if os.path.basename(filename).startswith('0_'):
                 new_name = filename.replace('0_', '', 1)
                 os.rename(filename, new_name)
-esign()
-convert_jpg_to_pdf()
