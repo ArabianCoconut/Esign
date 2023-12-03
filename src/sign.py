@@ -38,14 +38,3 @@ while user_input == '': #! This is a temporary Refractor. Will be removed in fut
     else:
         print("Exiting program.")
         break
-
-
-# if user_input == '':
-#     print("Signing PDF files.\n")
-#     esign()
-#     print("Signing completed.\n"
-#         "Please wait while the program processes the files.\n")
-#     time.sleep(2)
-#     print("\nProcessing completed.\n")
-# else:
-#     print("Error: Check log files.\n")
